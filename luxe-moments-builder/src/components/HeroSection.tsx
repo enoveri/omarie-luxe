@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, ArrowDown } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  sanityClient,
+  queries,
+  urlFor,
+  type SanityHeroImage,
+} from "@/lib/sanity";
 import heroPicnic from "@/assets/hero-picnic.jpg";
 import servicePicnic from "@/assets/service-picnic.jpg";
 import serviceProposal from "@/assets/service-proposal.jpg";
 import serviceBabyshower from "@/assets/service-babyshower.jpg";
 import servicePaintsip from "@/assets/service-paintsip.jpg";
 
-const backgroundImages = [
+const fallbackImages = [
   {
     src: heroPicnic,
     alt: "Luxury outdoor picnic setup with elegant decorations",
@@ -27,6 +34,20 @@ const backgroundImages = [
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const { data: heroImages } = useQuery<SanityHeroImage[]>({
+    queryKey: ["heroImages"],
+    queryFn: () => sanityClient.fetch(queries.heroImages),
+  });
+
+  // Use Sanity images if available, otherwise use fallback
+  const backgroundImages =
+    heroImages && heroImages.length > 0
+      ? heroImages.map((img) => ({
+          src: urlFor(img.image).width(1920).quality(85).url(),
+          alt: img.alt,
+        }))
+      : fallbackImages;
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
@@ -35,7 +56,7 @@ const HeroSection = () => {
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [backgroundImages.length]);
 
   return (
     <section

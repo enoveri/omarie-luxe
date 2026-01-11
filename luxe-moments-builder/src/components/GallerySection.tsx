@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  sanityClient,
+  queries,
+  urlFor,
+  type SanityGalleryItem,
+} from "@/lib/sanity";
 import servicePicnic from "@/assets/service-picnic.jpg";
 import serviceProposal from "@/assets/service-proposal.jpg";
 import serviceBabyshower from "@/assets/service-babyshower.jpg";
 import servicePaintsip from "@/assets/service-paintsip.jpg";
 import heroPicnic from "@/assets/hero-picnic.jpg";
 
-const galleryItems = [
+const fallbackGalleryItems = [
   {
     image: heroPicnic,
     category: "Picnics",
@@ -47,6 +54,22 @@ const galleryItems = [
 ];
 
 const GallerySection = () => {
+  const { data: sanityGalleryItems } = useQuery<SanityGalleryItem[]>({
+    queryKey: ["galleryItems"],
+    queryFn: () => sanityClient.fetch(queries.galleryItems),
+  });
+
+  // Use Sanity gallery items if available, otherwise use fallback
+  const galleryItems =
+    sanityGalleryItems && sanityGalleryItems.length > 0
+      ? sanityGalleryItems.map((item) => ({
+          image: urlFor(item.image).width(600).quality(85).url(),
+          category: item.category,
+          title: item.title,
+          location: item.location || "",
+        }))
+      : fallbackGalleryItems;
+
   // Show only first 4 items on home page
   const displayedItems = galleryItems.slice(0, 4);
 

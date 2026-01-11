@@ -1,6 +1,8 @@
 import { Quote } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { sanityClient, queries, type SanityTestimonial } from "@/lib/sanity";
 
-const testimonials = [
+const fallbackTestimonials = [
   {
     quote:
       "She transformed a simple idea into something magical. My fiancé cried. The proposal setup was beyond anything I imagined.",
@@ -28,6 +30,21 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
+  const { data: sanityTestimonials } = useQuery<SanityTestimonial[]>({
+    queryKey: ["testimonials"],
+    queryFn: () => sanityClient.fetch(queries.testimonials),
+  });
+
+  // Use Sanity testimonials if available, otherwise use fallback
+  const testimonials =
+    sanityTestimonials && sanityTestimonials.length > 0
+      ? sanityTestimonials.map((t) => ({
+          quote: t.quote,
+          name: t.name,
+          event: t.event,
+        }))
+      : fallbackTestimonials;
+
   return (
     <section id="testimonials" className="py-24 bg-secondary/30">
       <div className="container mx-auto px-6">

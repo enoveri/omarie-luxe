@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  sanityClient,
+  queries,
+  urlFor,
+  type SanityGalleryItem,
+} from "@/lib/sanity";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -20,7 +27,7 @@ const categories = [
   "Paint & Sip",
 ];
 
-const galleryItems = [
+const fallbackGalleryItems = [
   {
     image: heroPicnic,
     category: "Picnics",
@@ -97,6 +104,23 @@ const galleryItems = [
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+
+  const { data: sanityGalleryItems } = useQuery<SanityGalleryItem[]>({
+    queryKey: ["galleryItems"],
+    queryFn: () => sanityClient.fetch(queries.galleryItems),
+  });
+
+  // Use Sanity gallery items if available, otherwise use fallback
+  const galleryItems =
+    sanityGalleryItems && sanityGalleryItems.length > 0
+      ? sanityGalleryItems.map((item) => ({
+          image: urlFor(item.image).width(800).quality(85).url(),
+          category: item.category,
+          title: item.title,
+          location: item.location || "",
+          description: item.description || "",
+        }))
+      : fallbackGalleryItems;
 
   const filteredItems =
     activeFilter === "All"

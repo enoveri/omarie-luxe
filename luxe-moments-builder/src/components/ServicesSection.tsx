@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  sanityClient,
+  queries,
+  urlFor,
+  type SanityService,
+} from "@/lib/sanity";
 import servicePicnic from "@/assets/service-picnic.jpg";
 import serviceProposal from "@/assets/service-proposal.jpg";
 import serviceBabyshower from "@/assets/service-babyshower.jpg";
 import servicePaintsip from "@/assets/service-paintsip.jpg";
 
-const services = [
+const fallbackServices = [
   {
     title: "Luxury Picnic Setups",
     description:
@@ -33,6 +40,21 @@ const services = [
 ];
 
 const ServicesSection = () => {
+  const { data: sanityServices } = useQuery<SanityService[]>({
+    queryKey: ["services"],
+    queryFn: () => sanityClient.fetch(queries.services),
+  });
+
+  // Use Sanity services if available, otherwise use fallback
+  const services =
+    sanityServices && sanityServices.length > 0
+      ? sanityServices.map((service) => ({
+          title: service.title,
+          description: service.description,
+          image: urlFor(service.image).width(800).quality(85).url(),
+        }))
+      : fallbackServices;
+
   return (
     <section id="services" className="py-24 bg-secondary/30">
       <div className="container mx-auto px-6">
