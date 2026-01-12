@@ -119,7 +119,7 @@ const Gallery = () => {
           title: item.title,
           location: item.location || "",
           description: item.description || "",
-          client: item.client || ""
+          client: item.client || "",
         }))
       : fallbackGalleryItems;
 
@@ -203,7 +203,9 @@ const Gallery = () => {
                   </h3>
                   <p className="text-background/80 text-sm">{item.location}</p>
                   {item.client && (
-                    <p className="text-background/60 text-xs mt-1">Client: {item.client}</p>
+                    <p className="text-background/60 text-xs mt-1">
+                      Client: {item.client}
+                    </p>
                   )}
                 </div>
               </div>
