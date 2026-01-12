@@ -88,7 +88,7 @@ const Navigation = () => {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="text-foreground/80 hover:text-primary transition-colors duration-300 text-sm font-medium tracking-wide"
+              className={`${isScrolled ? "text-foreground/80" : "text-white"} hover:text-primary transition-colors duration-300 text-sm font-medium tracking-wide`}
             >
               {link.name}
             </a>
