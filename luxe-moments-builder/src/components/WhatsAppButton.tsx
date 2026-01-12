@@ -10,13 +10,13 @@ const WhatsAppButton = () => {
       aria-label="Contact us on WhatsApp"
     >
       <MessageCircle size={26} className="text-[hsl(0,0%,100%)]" />
-      
+
       {/* Tooltip */}
       <span className="absolute right-full mr-3 px-4 py-2 bg-foreground text-background text-sm font-medium rounded-lg whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-lg">
         Chat with us
         <span className="absolute top-1/2 left-full -translate-y-1/2 border-8 border-transparent border-l-foreground" />
       </span>
-      
+
       {/* Pulse Animation */}
       <span className="absolute inset-0 rounded-full bg-[hsl(142,70%,45%)] animate-ping opacity-30" />
     </a>

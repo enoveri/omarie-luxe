@@ -119,6 +119,7 @@ const Gallery = () => {
           title: item.title,
           location: item.location || "",
           description: item.description || "",
+          client: item.client || ""
         }))
       : fallbackGalleryItems;
 
@@ -179,50 +180,31 @@ const Gallery = () => {
           </div>
 
           {/* Gallery Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {filteredItems.map((item, index) => (
               <div
-                key={index}
-                className="group relative overflow-hidden rounded-2xl bg-card shadow-soft hover:shadow-elevated transition-all duration-500"
+                key={`${item.title}-${index}`}
+                className="group relative overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer"
               >
-                {/* Image */}
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                </div>
-
-                {/* Overlay Content */}
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-background transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <p className="text-primary-foreground/80 text-xs font-medium tracking-wider uppercase mb-2">
-                      {item.category}
-                    </p>
-                    <h3 className="font-heading text-xl font-medium mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-background/80 mb-3">
-                      {item.description}
-                    </p>
-                    <p className="text-xs text-background/70 flex items-center gap-1">
-                      <span>📍</span> {item.location}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Card Content (visible by default) */}
-                <div className="p-6 group-hover:opacity-0 transition-opacity duration-500">
-                  <p className="text-primary text-xs font-medium tracking-wider uppercase mb-2">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Content */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                  <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full mb-3">
                     {item.category}
-                  </p>
-                  <h3 className="font-heading text-xl font-medium text-foreground mb-2">
+                  </span>
+                  <h3 className="font-heading text-xl text-background font-medium mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {item.location}
-                  </p>
+                  <p className="text-background/80 text-sm">{item.location}</p>
+                  {item.client && (
+                    <p className="text-background/60 text-xs mt-1">Client: {item.client}</p>
+                  )}
                 </div>
               </div>
             ))}

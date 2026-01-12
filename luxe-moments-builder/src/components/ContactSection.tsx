@@ -36,9 +36,7 @@ const ContactSection = () => {
               <h3 className="font-heading text-lg font-medium text-foreground mb-2">
                 WhatsApp
               </h3>
-              <p className="text-muted-foreground text-sm">
-                +256 789 951 151
-              </p>
+              <p className="text-muted-foreground text-sm">+256 789 951 151</p>
             </a>
 
             {/* Phone */}
@@ -55,9 +53,7 @@ const ContactSection = () => {
               <h3 className="font-heading text-lg font-medium text-foreground mb-2">
                 Call Us
               </h3>
-              <p className="text-muted-foreground text-sm">
-                +256 789 951 151
-              </p>
+              <p className="text-muted-foreground text-sm">+256 789 951 151</p>
             </a>
 
             {/* Location */}
@@ -68,9 +64,7 @@ const ContactSection = () => {
               <h3 className="font-heading text-lg font-medium text-foreground mb-2">
                 Location
               </h3>
-              <p className="text-muted-foreground text-sm">
-                Kampala, Uganda
-              </p>
+              <p className="text-muted-foreground text-sm">Kampala, Uganda</p>
             </div>
           </div>
 

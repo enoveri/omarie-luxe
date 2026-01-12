@@ -104,7 +104,7 @@ const ServicesSection = () => {
                   asChild
                 >
                   <a
-                    href={`https://wa.me/256700000000?text=Hi%20Omarie%20Luxe,%20I'm%20interested%20in%20${encodeURIComponent(
+                    href={`https://wa.me/256789951151?text=Hi%20Omarie%20Luxe,%20I'm%20interested%20in%20${encodeURIComponent(
                       service.title
                     )}`}
                     target="_blank"

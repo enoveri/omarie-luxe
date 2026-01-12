@@ -26,13 +26,7 @@ const Navigation = () => {
       e.preventDefault();
       if (location.pathname !== "/") {
         // Navigate to home first, then scroll
-        navigate("/");
-        setTimeout(() => {
-          const element = document.querySelector(href);
-          if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 100);
+        navigate("/", { state: { scrollTo: href } });
       } else {
         // Already on home, just scroll
         const element = document.querySelector(href);
