@@ -31,6 +31,7 @@ export interface SanityGalleryItem {
   title: string;
   description?: string;
   category: string;
+  subcategory?: string;
   location?: string;
   image: SanityImageSource;
 }
@@ -75,6 +76,7 @@ export const queries = {
     title,
     description,
     category,
+    subcategory,
     location,
     image
   }`,

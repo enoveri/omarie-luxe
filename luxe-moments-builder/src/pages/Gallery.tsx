@@ -27,10 +27,13 @@ const categories = [
   "Paint & Sip",
 ];
 
+const picnicSubcategories = ["All Picnics", "Décor", "Food", "Drinks", "Games"];
+
 const fallbackGalleryItems = [
   {
     image: heroPicnic,
     category: "Picnics",
+    subcategory: "Décor",
     title: "Golden Hour Picnic",
     location: "Entebbe Botanical Gardens",
     description:
@@ -39,6 +42,7 @@ const fallbackGalleryItems = [
   {
     image: serviceProposal,
     category: "Proposals",
+    subcategory: "",
     title: "Romantic Garden Proposal",
     location: "Kampala Private Estate",
     description:
@@ -47,6 +51,7 @@ const fallbackGalleryItems = [
   {
     image: serviceBabyshower,
     category: "Baby Showers",
+    subcategory: "",
     title: "Pink & Gold Baby Shower",
     location: "Serena Hotel Gardens",
     description:
@@ -55,6 +60,7 @@ const fallbackGalleryItems = [
   {
     image: servicePaintsip,
     category: "Paint & Sip",
+    subcategory: "",
     title: "Twilight Art Evening",
     location: "Lake Victoria Shores",
     description:
@@ -63,6 +69,7 @@ const fallbackGalleryItems = [
   {
     image: servicePicnic,
     category: "Picnics",
+    subcategory: "Food",
     title: "Sunset Romance",
     location: "Munyonyo Lakeside",
     description:
@@ -71,6 +78,7 @@ const fallbackGalleryItems = [
   {
     image: serviceProposal,
     category: "Proposals",
+    subcategory: "",
     title: "Candlelit Surprise",
     location: "Jinja Gardens",
     description:
@@ -79,6 +87,7 @@ const fallbackGalleryItems = [
   {
     image: heroPicnic,
     category: "Picnics",
+    subcategory: "Drinks",
     title: "Garden Party Elegance",
     location: "Kampala Botanical Gardens",
     description:
@@ -87,6 +96,7 @@ const fallbackGalleryItems = [
   {
     image: serviceBabyshower,
     category: "Baby Showers",
+    subcategory: "",
     title: "Blue Sky Baby Celebration",
     location: "Kololo Residence",
     description:
@@ -95,6 +105,7 @@ const fallbackGalleryItems = [
   {
     image: servicePaintsip,
     category: "Paint & Sip",
+    subcategory: "",
     title: "Creative Sunset Session",
     location: "Entebbe Shores",
     description:
@@ -104,6 +115,7 @@ const fallbackGalleryItems = [
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [activeSubFilter, setActiveSubFilter] = useState("All Picnics");
 
   const { data: sanityGalleryItems } = useQuery<SanityGalleryItem[]>({
     queryKey: ["galleryItems"],
@@ -116,6 +128,7 @@ const Gallery = () => {
       ? sanityGalleryItems.map((item) => ({
           image: urlFor(item.image).width(800).quality(85).url(),
           category: item.category,
+          subcategory: item.subcategory || "",
           title: item.title,
           location: item.location || "",
           description: item.description || "",
@@ -126,7 +139,20 @@ const Gallery = () => {
   const filteredItems =
     activeFilter === "All"
       ? galleryItems
+      : activeFilter === "Picnics" && activeSubFilter !== "All Picnics"
+      ? galleryItems.filter(
+          (item) =>
+            item.category === "Picnics" && item.subcategory === activeSubFilter
+        )
       : galleryItems.filter((item) => item.category === activeFilter);
+
+  // Reset subcategory filter when main category changes
+  const handleCategoryChange = (category: string) => {
+    setActiveFilter(category);
+    if (category !== "Picnics") {
+      setActiveSubFilter("All Picnics");
+    }
+  };
 
   return (
     <main className="min-h-screen">
@@ -163,11 +189,11 @@ const Gallery = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           {/* Filter Tabs */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setActiveFilter(category)}
+                onClick={() => handleCategoryChange(category)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   activeFilter === category
                     ? "bg-primary text-primary-foreground shadow-soft"
@@ -178,6 +204,25 @@ const Gallery = () => {
               </button>
             ))}
           </div>
+
+          {/* Picnic Subcategory Tabs */}
+          {activeFilter === "Picnics" && (
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+              {picnicSubcategories.map((sub) => (
+                <button
+                  key={sub}
+                  onClick={() => setActiveSubFilter(sub)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 border ${
+                    activeSubFilter === sub
+                      ? "bg-primary/20 text-primary border-primary"
+                      : "bg-background text-muted-foreground border-border hover:border-primary/50 hover:text-primary"
+                  }`}
+                >
+                  {sub}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Gallery Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

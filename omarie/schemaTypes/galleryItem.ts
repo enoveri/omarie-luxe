@@ -32,6 +32,22 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'subcategory',
+      title: 'Picnic Subcategory',
+      type: 'string',
+      description: 'Only applicable when category is "Picnics"',
+      options: {
+        list: [
+          {title: 'Décor', value: 'Décor'},
+          {title: 'Food', value: 'Food'},
+          {title: 'Drinks', value: 'Drinks'},
+          {title: 'Games', value: 'Games'},
+        ],
+        layout: 'radio',
+      },
+      hidden: ({document}) => document?.category !== 'Picnics',
+    }),
+    defineField({
       name: 'location',
       title: 'Location',
       type: 'string',
