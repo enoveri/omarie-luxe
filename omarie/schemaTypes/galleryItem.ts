@@ -54,13 +54,34 @@ export default defineType({
       placeholder: 'e.g., Entebbe Botanical Gardens',
     }),
     defineField({
+      name: 'clientName',
+      title: 'Client Name',
+      type: 'string',
+      description: 'Name of the client for this event (optional)',
+    }),
+    defineField({
       name: 'image',
-      title: 'Image',
+      title: 'Main Image',
       type: 'image',
       options: {
         hotspot: true,
       },
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'images',
+      title: 'Additional Images',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
+      ],
+      description:
+        'Add more images for this gallery item (these will be shown in a lightbox/carousel)',
     }),
   ],
   preview: {

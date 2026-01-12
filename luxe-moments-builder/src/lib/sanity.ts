@@ -33,7 +33,9 @@ export interface SanityGalleryItem {
   category: string;
   subcategory?: string;
   location?: string;
+  clientName?: string;
   image: SanityImageSource;
+  images?: SanityImageSource[];
 }
 
 export interface SanityTestimonial {
@@ -78,13 +80,15 @@ export const queries = {
     category,
     subcategory,
     location,
-    image
+    clientName,
+    image,
+    images
   }`,
 
   testimonials: `*[_type == "testimonial"] | order(order asc) {
     _id,
     quote,
-    name,
+    "name": coalesce(client->name, name),
     event,
     order
   }`,

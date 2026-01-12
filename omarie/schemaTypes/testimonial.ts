@@ -13,10 +13,18 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'client',
+      title: 'Client',
+      type: 'reference',
+      to: [{type: 'client'}],
+      description: 'Select a client from the list',
+    }),
+    defineField({
       name: 'name',
-      title: 'Client Name',
+      title: 'Client Name (Legacy)',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      description: 'Only used if no client is selected above',
+      hidden: ({document}) => !!document?.client,
     }),
     defineField({
       name: 'event',
@@ -35,13 +43,14 @@ export default defineType({
   ],
   preview: {
     select: {
-      title: 'name',
+      clientName: 'client.name',
+      legacyName: 'name',
       subtitle: 'event',
       quote: 'quote',
     },
-    prepare({title, subtitle, quote}) {
+    prepare({clientName, legacyName, subtitle, quote}) {
       return {
-        title,
+        title: clientName || legacyName || 'No name',
         subtitle,
         description: quote?.substring(0, 60) + '...',
       }
